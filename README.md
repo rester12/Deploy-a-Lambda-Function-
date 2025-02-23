@@ -93,17 +93,16 @@ When creating an IAM role, it's essential to attach the appropriate permissions.
 
 To automate image processing, a Lambda function is configured with an Amazon S3 trigger, enabling it to execute whenever a new object is uploaded to the source S3 bucket.
 
-I created the Lambda Function by Opening the AWS Management Console, searching for Lambda, and selecting it, and clicking create function. 
-On the Create function page, select Author from scratch, in the Basic information section, configure the following:
+I created the Lambda Function by: 
 
-Function name: 
-Create-Thumbnail Runtime:
-Select Python 3.9 from the available options:
-Expand Change default execution role and choose:
-Execution role: 
-Use an existing role Existing role: 
-lambda-execution-role (Grants permission to read and write images in S3 buckets.) 
-click create function.
+<ol>
+<li><b>Open the AWS Management Console</b></li>
+<li><b>Search for Lambda and select it</b></li>
+<li><b>Click create function</b></li>                 
+<li><b>Select Author from scratch</b></b></li>
+<li><b>In the Basic information section, configure the following:</b><br /> Function name: Create-Thumbnail <br /> Runtime: Select Python 3.9 from the available options.<br /> Expand Change default execution role and choose: Execution role: <br />Use an existing role Existing role: lambda-execution-role (Grants permission to read and write images in S3 buckets.</li>
+<li><b>Click create function</b></li></li>
+</ol>
 
 Once the function is successfully created, a "Successfully created the function" message appears at the top of the page.
 
@@ -114,6 +113,39 @@ Once the function is successfully created, a "Successfully created the function"
 <br/>
 
 ![S3 Buckets](https://i.imgur.com/ho14x4N.png)
+
+<br/>
+
+I set up an Amazon S3 trigger to automatically invoke the Lambda function whenever an image is uploaded to the source S3 bucket. The Lambda function then processes the image. This kind of automation is essential in cloud computing for efficient workflows.
+
+Steps to create the S3 trigger: 
+
+<ol>
+<li><b>Go to the Create-Thumbnail Lambda function page</b></li>
+<li><b>In the Function overview section, click Add trigger</b></li>
+<li><b>Click create function</b></li>                 
+<li><b>In the Trigger configuration section, configure the following settings:</b><br /> Source: Select S3 <br />Bucket: Choose the source bucket. ex resterimages-123456789 <br /> Acknowledge the Recursive invocation warning </li>
+<li><b>Click Add</b></li></li>
+</ol>
+<br />
+Once the trigger is successfully added, a "Trigger was successfully added to function" message appears at the top of the page.
+
+<br />
+<br />
+
+![S3 Buckets](https://i.imgur.com/c2JJ4ic.png)
+
+![S3 Buckets](https://i.imgur.com/QmYaHYq.png)
+
+![S3 Buckets](https://i.imgur.com/7U9H2pf.png)
+
+
+To enable image processing, I configured the Lambda function by uploading the <strong> CreateThumbnail.zip </strong> deployment package in the Code tab of the Lambda console. Please refer to the <strong> CreateThumbnail.zip </strong> file attached to this repository.
+The function performs several tasks: receiving an event with the image name, downloading the image, resizing it using the Pillow library, and uploading the resized image to the target S3 bucket.
+ 
+<br />
+<br />
+
 
 
 The following diagram depicts the basic architecture of the lab environment. The resources depicted in the diagram already exist in your Amazon Web Services (AWS) account when you start the lab. <br/> ![Figure 1](https://github.com/user-attachments/assets/a04afe38-bd83-4a8c-9480-0f03c0caffd5) <i>Figure 1: The diagram illustrates a website developer working in an AWS Cloud environment using an AWS Cloud9 IDE hosted on an Amazon Elastic Compute Cloud (Amazon EC2) instance. The instance is set up in a security-controlled public subnet of a virtual private cloud (VPC) and is accessible over the internet. The hosted website is available to consumers through the Apache HTTP Server running on the EC2 instance. For more information, refer to the following detailed diagram overview.</i> <br /> <br /> <br /> My first step was connecting to AWS Cloud 9 IDE. After connecting to the Cloud 9 environment I verified that the web server was running by using the following command: <b> sudo systemctl status apache2</b>. ![Verify Apache Server Working](https://github.com/user-attachments/assets/bbe078dc-6376-4ec1-b8ba-84799b14f32f) <br /> I wanted to observe the web server document root directory and contents. To discover the default web server DocumentRoot location, I ran the following command: <b> cat /etc/apache2/sites-available/000-default.conf</b>. In the web server’s configuration file, webpages are served to users from the default directory /var/www/html. To list the contents of the default directory, you can run the following command: <b> ls /var/www/html</b>. ![Document Root location](https://github.com/user-attachments/assets/22448fd9-25f4-4fc7-a62f-d047cca98a92) <br /> To retrieve the IPv4 public IP address of the instance AWS Cloud9 is running on, run this command: <b> curl 169.254.169.254/latest/meta-data/public-ipv4</b>. You will use this public IP address to load the webpage. ![Retrieve IP Address to load webpage](https://github.com/user-attachments/assets/81c30c1b-7eab-4a6d-a354-a4473d678f22) <br /> The webpage would not load for me. <br/> ![Unable to load webpage](https://github.com/user-attachments/assets/fc3791eb-6776-4385-bcfb-fe2fc6ef6105) <br /> I began troubleshooting. I wanted to check for connectivity issues so I started checking for any network issues. I looked at the security group rules. The security group acts as a virtual firewall. When I checked the inbound rules I noticed there was no rule to allow traffic from the internet. ![Instance Inbound Rules](https://github.com/user-attachments/assets/b47ef338-c2e4-45ba-91b6-75e97eb0e990) <br /> I added an inbound rule to allow all traffic from any IP address. ![Updated inbound rules](https://github.com/user-attachments/assets/0e8f4572-969a-4639-bbe2-6a8d6c3bc345) <br /> I reloaded the webpage after my configuration changes. It was successful this time. ![Successfully loaded webpage](https://github.com/user-attachments/assets/0947084f-eea7-4eee-939e-ad14f1f82cc2) <br /> I moved the existing index.html file to a backup location. To do this: Return to the AWS Cloud9 Bash terminal, and run the following command: <b> sudo mv /var/www/html/index.html /var/tmp/</b>. I tried to reload the webpage after making these changes, but the page would not load. ![No files in Root location](https://github.com/user-attachments/assets/92144ab3-8f4b-4fc0-a23a-547ecd74b64a) <i>Figure 2: This message is displayed because there are currently no files in the DocumentRoot location.</i> <br /> I configured the AWS Cloud9 IDE environment window to show the web server document root. To do so, in the AWS Cloud9 Bash terminal, run the following commands: <b> ln -s /var/www/ /home/ubuntu/environment/www sudo chown -R ubuntu /var/www/</b>. The first command created a symlink to the /var/www directory in your environment directory. The second command changed ownership of the files in the /var/www directory so the ubuntu user (which is you) can edit the files in this www directory. If you want, you can verify the user by running whoami. ![Configure root directory](https://github.com/user-attachments/assets/a2bd39a4-98ff-488f-807f-0b75c87e2a58) <br /> I began creating a <span zeum4c20="PR_1_0" data-ddnwab="PR_1_0" aria-invalid="grammar" class="Lm ng">webpage</span> for "Anycompany Bicycle parts". I was so proud of myself for getting the header to display that I deviated from the project. Here is a temporary message where I'm asking for a job. ![Successful webpage](https://github.com/user-attachments/assets/576b59f4-0434-4933-a737-fcd9fbcef71a) Now it's time to get back on track. I added some heading and paragraph elements. I was able to add hyperlinks to jump to different sections in my webpage. Additionally, I was able to open links in a different <span zeum4c20="PR_2_0" data-ddnwab="PR_2_0" aria-invalid="spelling" class="LI ng">browswer</span> from my webpage. I added a target attribute and gave it the value of "_blank." I added an HTML entity as well. I figured out how to include the copyright symbol. It can be achieved by typing: <b><p>&copy; </b>. Below you will see a snippet of my HTML code. ![HTML code](https://github.com/user-attachments/assets/be5b5706-5f3a-43f1-a119-17471606231e) <br /> Finally I completed my webpage. It turned out better than I expected. ![Completed Webpage](https://github.com/user-attachments/assets/de1a58fb-1875-431d-a32f-35b14e18a029) <br/> <h2>Summary</h2> The project commenced with the verification of the Apache2 web server's status in AWS Cloud9. Upon encountering networking issues that hindered webpage loading, I implemented troubleshooting steps to resolve them, facilitating access to the default Apache2 page. Subsequently, I backed up the existing index.html file, adjusted the AWS Cloud9 environment settings to properly display the document root, and created a new webpage incorporating hyperlinks, an HTML entity, and a favicon. This project gave me the confidence and skills to create webpages. I'm using the knowledge I gained to go back and enhance the repositories of my previous projects. I learned how to use features like, bold and italicize text. These changes help to visually enhance my work. I will be adding to this website in the future. <br /></div>
