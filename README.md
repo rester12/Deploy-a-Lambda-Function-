@@ -61,7 +61,35 @@ In the Upload window, I clicked Add files, selected HappyFace.jpg, and initiated
 
 <br/>
 
+
 ![S3 Buckets](https://i.imgur.com/S1S2ftp.png)
+
+Creating an IAM Role for the Lambda Function
+To enable the Lambda function, an IAM role was created and configured with permissions to read and write images in the S3 source and target buckets.
+
+Steps to Create the IAM Role:
+
+Open the AWS Management Console, search for IAM, and select it.
+
+In the IAM Dashboard, go to the Roles section and click Create role.
+
+Under Trusted entity type, select AWS service.
+
+For Use case, choose Lambda, then click Next.
+
+In the Permissions policies section, attach the appropriate policy:
+
+Search for and select AmazonS3FullAccess to allow read and write access to S3 buckets.
+
+Click Next, provide a Role name (e.g., lambda-execution-role), and add an optional description.
+Click Create role to complete the setup.
+
+
+When creating an IAM role, it's essential to attach the appropriate permissions. I always follow the <b> principle of least privilege, </b> granting only the permissions necessary to perform specific tasks. You can either use AWS-managed policies or create custom policies tailored to your needs.
+
+![S3 Buckets](https://i.imgur.com/BB4p85J.png)
+
+<br/>
 
 To automate image processing, a Lambda function is configured with an Amazon S3 trigger, enabling it to execute whenever a new object is uploaded to the source S3 bucket.
 
