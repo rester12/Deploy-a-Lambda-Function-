@@ -93,15 +93,17 @@ When creating an IAM role, it's essential to attach the appropriate permissions.
 
 To automate image processing, a Lambda function is configured with an Amazon S3 trigger, enabling it to execute whenever a new object is uploaded to the source S3 bucket.
 
-I created the Lambda Function
-Open the AWS Management Console, search for Lambda, and select it, click create function.
+I created the Lambda Function by Opening the AWS Management Console, searching for Lambda, and selecting it, and clicking create function. 
 On the Create function page, select Author from scratch, in the Basic information section, configure the following:
 
-Function name: Create-Thumbnail
-Runtime: Select Python 3.9 from the available options.
+Function name: 
+Create-Thumbnail Runtime:
+Select Python 3.9 from the available options:
 Expand Change default execution role and choose:
-Execution role: Use an existing role
-Existing role: lambda-execution-role (Grants permission to read and write images in S3 buckets.), click create function.
+Execution role: 
+Use an existing role Existing role: 
+lambda-execution-role (Grants permission to read and write images in S3 buckets.) 
+click create function.
 
 Once the function is successfully created, a "Successfully created the function" message appears at the top of the page.
 
