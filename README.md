@@ -9,8 +9,7 @@ I created an AWS Lambda function and configured an event notification for Amazon
 - <b> Amazon S3: </b> Amazon S3 is an object storage service that offers industry-leading scalability, data availability, security, and performance. It stores and protect any amount of data for a range of use cases, such as data lakes, websites, built-for-the-cloud applications, backups, archives, machine learning, and analytics.<br />
 - <b> IAM: </b> AWS Identity and Access Management (IAM) is a web service that helps you securely control access to AWS resources. With IAM, you can centrally manage permissions that control which AWS resources users can access. You use IAM to control who is authenticated (signed in) and authorized (has permissions) to use resources.<br />
 - <b> AWS Lambda: </b> AWS Lambda is a compute service that lets you run code without provisioning or managing servers. Lambda runs your code on a high availability compute infrastructure and performs the administration of the compute resources, including server and operating system maintenance, capacity provisioning and automatic scaling, and logging. With Lambda, all you need to do is supply your code in one of the language runtimes that Lambda supports.<br />
-- <b> AWS CloudWatch: </b> AWS CloudWatch is a monitoring and observability service provided by AWS that allows you to monitor your AWS resources and the applications you run on AWS in real time. It collects and tracks metrics, which are variables you can measure for your resources and applications, providing system-wide visibility into resource utilization, application performance, and operational health.
-has context menu 
+- <b> AWS CloudWatch: </b> AWS CloudWatch is a monitoring and observability service provided by AWS that allows you to monitor your AWS resources and the applications you run on AWS in real time. It collects and tracks metrics, which are variables you can measure for your resources and applications, providing system-wide visibility into resource utilization, application performance, and operational health. 
  
  <h2>Environments Used </h2>
  
@@ -43,9 +42,9 @@ The first bucket, the source bucket, was created to store the original uploaded 
 
 Since S3 bucket names must be globally unique, I followed proper naming conventions. The generic names images and images-resized were unavailable, so I appended a unique identifier to ensure uniqueness:
 
-Source bucket: resterimages-123456
+Source bucket: resterimages-123456.
 
-Target bucket: resterimages-resized123456
+Target bucket: resterimages-resized123456.
 
 This setup ensures seamless image processing and storage within AWS.
 
@@ -157,17 +156,23 @@ Running the test successfully processed the HappyFace.jpg image, confirmed by th
 
 ![Test Lambda](https://i.imgur.com/7yRgUEe.png)
 
-Finally, I verified the output by checking the target S3 bucket (resterimages-123456-resized), where the resized image appeared as expected. 
+Finally, I verified the output by checking the target S3 bucket (resterimages-123456-resized), where the resized image appeared as expected.
 
-I also monitored the Lambda function using the Monitor tab in the console, reviewing metrics like invocations, duration, and errors, along with detailed logs in Amazon CloudWatch. 
+Additionally, I monitored the Lambda function through the Monitor tab in the console, reviewing key metrics such as invocations, duration, and errors, as well as analyzing detailed logs in Amazon CloudWatch. 
 
-I had some issues as the function was not completing successfully and per the cloudwatch logs showed the the target bucket does not exist and upon troubleshooting the target bucket was not named correctly, after reviewing the steps again I renamed the bucket following the naming scheme and this resolved the issue.
+I encountered an issue where the function was not completing successfully. According to the CloudWatch logs, the target bucket did not exist. Upon troubleshooting, I discovered that the bucket was incorrectly named. After reviewing the steps, I renamed the bucket to match the required naming scheme, which resolved the issue.
 
-Lesson learned: all naming schemes must be followed exactly or it will cause errors.
+<b>Lesson learned:</b> Adhering strictly to naming schemes is essential to prevent errors.
 
 <br /> 
 
 ![Verified Output](https://i.imgur.com/fmuX1Lj.png)
+
+<br />
+
+To mark the successful completion of the project, Rester and I took a commemorative photo together.
+
+![Verified Output](https://i.imgur.com/HEpG7ml.jpeg)
 
 
 
